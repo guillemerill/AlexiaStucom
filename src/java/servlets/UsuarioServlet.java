@@ -32,6 +32,7 @@ public class UsuarioServlet extends HttpServlet {
             if (ejb.login(user, pwd)) {
                 request.setAttribute("status", STATUS_OK);
                 request.getSession(true).setAttribute("user", user);
+                request.setAttribute("tipo", ejb.getTipoUsuario(user));
                 request.getRequestDispatcher("/index.jsp").forward(request, response);
             } else {
                 request.setAttribute("status", STATUS_ERROR);

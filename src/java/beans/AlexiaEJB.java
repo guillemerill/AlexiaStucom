@@ -1,9 +1,12 @@
 package beans;
 
 import entidades.Alumno;
+import entidades.Asignatura;
+import entidades.DAONotas;
 import entidades.Nota;
 import entidades.Profesor;
 import entidades.Usuario;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -65,9 +68,28 @@ public class AlexiaEJB {
         return ok;
     }
     
-    public List<Nota> getNotasByAlumno(String nombre_usu) {
+    public List<DAONotas> getNotasByAlumno(String nombre_usu) {
         Alumno a = getAlumnoBynombreUsu(nombre_usu);
        
-        return emf.createEntityManager().createNamedQuery("Nota.findByIdalumno").setParameter("idalumno", a.getIdalumno()).getResultList();
+        List<Nota> notas = emf.createEntityManager().createNamedQuery("Nota.findByIdalumno").setParameter("idalumno", a.getIdalumno()).getResultList();
+        List<DAONotas> nfinal = new ArrayList();
+        for (Nota n : notas) {
+            nfinal.add(new DAONotas(getAsignaturaById(n.getIdasignatura()), getProfesorById(n.getIdprofesor()), n.getNota()));
+        }
+        
+        return nfinal;
+    }
+    
+    public String getTipoUsuario(String nombre_usu) {
+        Usuario usu = emf.createEntityManager().find(Usuario.class, nombre_usu);
+        return usu.getTipo();
+    }
+    
+    private String getAsignaturaById(int idasignatura) {
+        return emf.createEntityManager().find(Asignatura.class, idasignatura).getNombre();
+    }
+    
+    private String getProfesorById(int idprofesor) {
+        return emf.createEntityManager().find(Profesor.class, idprofesor).getNombre();
     }
 }

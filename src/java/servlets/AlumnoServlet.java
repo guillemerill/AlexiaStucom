@@ -3,6 +3,7 @@ package servlets;
 import Util.MD5;
 import beans.AlexiaEJB;
 import entidades.Alumno;
+import entidades.DAONotas;
 import entidades.Nota;
 import java.io.IOException;
 import java.util.List;
@@ -44,7 +45,7 @@ public class AlumnoServlet extends HttpServlet {
                 request.setAttribute("msg", "Debes iniciar sesión.");
                 request.getRequestDispatcher("/login.jsp").forward(request, response);
             }
-            List<Nota> notas = ejb.getNotasByAlumno(user);
+            List<DAONotas> notas = ejb.getNotasByAlumno(user);
             
             String msg;
             if (!notas.isEmpty()) {
