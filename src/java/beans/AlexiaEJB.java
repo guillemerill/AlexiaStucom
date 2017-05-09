@@ -2,10 +2,12 @@ package beans;
 
 import entidades.Alumno;
 import entidades.Asignatura;
-import entidades.DAONotas;
+import entidades.NotasDTO;
 import entidades.Nota;
 import entidades.Profesor;
+import entidades.ProfesorAsignatura;
 import entidades.Usuario;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -39,9 +41,9 @@ public class AlexiaEJB {
     
     public boolean login(String nombre_usu, String pwd) {
         Usuario usu = emf.createEntityManager().find(Usuario.class, nombre_usu);
-
-        if (usu==null) {
-            return true;
+        if (usu != null) {
+            if (usu.getPassword().equals(pwd))
+                return true;
         }
         return false;
     }
@@ -52,6 +54,10 @@ public class AlexiaEJB {
 
     private boolean existeAlumno(Alumno a) {
         return (emf.createEntityManager().createNamedQuery("Alumno.findByNombreUsu").setParameter("nombreUsu", a.getNombreUsu())) != null;
+    }
+    
+    private boolean existeProfesor(Profesor p) {
+        return (emf.createEntityManager().createNamedQuery("Alumno.findByNombreUsu").setParameter("nombreUsu", p.getNombreUsu())) != null;
     }
 
     public boolean insertAlumno(Alumno a) {
@@ -68,16 +74,43 @@ public class AlexiaEJB {
         return ok;
     }
     
-    public List<DAONotas> getNotasByAlumno(String nombre_usu) {
+    public boolean insertProfesor(Profesor p) {
+        EntityManager em = emf.createEntityManager();
+        boolean ok = false;
+        if (!existeProfesor(p)) {
+            if (!existeUsuario(p.getNombreUsu())) {
+                em.persist(new Usuario(p.getNombreUsu(), p.getPass(), "PROFESOR"));
+                em.persist(p);
+                ok = true;
+            }
+        }
+        em.close();
+        return ok;
+    }
+    
+    public List<NotasDTO> getNotasByAlumno(String nombre_usu) {
         Alumno a = getAlumnoBynombreUsu(nombre_usu);
        
         List<Nota> notas = emf.createEntityManager().createNamedQuery("Nota.findByIdalumno").setParameter("idalumno", a.getIdalumno()).getResultList();
-        List<DAONotas> nfinal = new ArrayList();
+        List<NotasDTO> nfinal = new ArrayList();
+        
         for (Nota n : notas) {
-            nfinal.add(new DAONotas(getAsignaturaById(n.getIdasignatura()), getProfesorById(n.getIdprofesor()), n.getNota()));
+            nfinal.add(new NotasDTO(getAsignaturaById(n.getIdasignatura()), getProfesorById(n.getIdprofesor()), n.getNota()));
         }
         
         return nfinal;
+    }
+    public List<Asignatura> getAsignaturasByProfesor(String nombre_usu) {
+        Profesor p = getProfesorBynombreUsu(nombre_usu);
+        List<ProfesorAsignatura> idAsignaturas = emf.createEntityManager().createNamedQuery("findByIdprofesor").setParameter("idprofesor", p.getIdprofesor()).getResultList();
+        ArrayList<Integer> asign = new ArrayList<>();
+        
+        for (ProfesorAsignatura a : idAsignaturas) {
+            asign.add(a.getIdasignatura());
+        }
+        List<Asignatura> asignaturas = emf.createEntityManager().createNamedQuery("Asignatura.findByIdasignaturaIn").setParameter("idasignatura", asign).getResultList();
+
+        return asignaturas;
     }
     
     public String getTipoUsuario(String nombre_usu) {

@@ -1,7 +1,13 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package servlets;
 
 import beans.AlexiaEJB;
-import entidades.NotasDTO;
+import entidades.Alumno;
+import entidades.Asignatura;
 import java.io.IOException;
 import java.util.List;
 import javax.ejb.EJB;
@@ -11,12 +17,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author DAM
- */
 @WebServlet(name = "AlumnoServlet", urlPatterns = {"/AlumnoServlet"})
-public class AlumnoServlet extends HttpServlet {
+public class ProfesorServlet extends HttpServlet {
 
     @EJB AlexiaEJB ejb;
     public static final String STATUS_OK = "Ok";
@@ -25,30 +27,52 @@ public class AlumnoServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
-        if ("Ver notas".equals(request.getParameter("action"))) {
+        if ("Introducir notas".equals(request.getParameter("action"))) {
             String user = (String) request.getSession(true).getAttribute("user");
 
             if (user.equals("")) {
                 request.setAttribute("msg", "Debes iniciar sesión.");
                 request.getRequestDispatcher("/login.jsp").forward(request, response);
             }
-            List<NotasDTO> notas = ejb.getNotasByAlumno(user);
+            List<Asignatura> asignaturas = ejb.getAsignaturasByProfesor(user);
             
             String msg;
-            if (!notas.isEmpty()) {
+            if (!asignaturas.isEmpty()) {
                 request.setAttribute("status", STATUS_OK);
-                request.setAttribute("notas", notas);
+                request.setAttribute("asignaturas", asignaturas);
             } else {
                 request.setAttribute("status", STATUS_ERROR);
                 msg = "No se han introducido notas.";
                 request.setAttribute("msg", msg);
             }
             
-            request.getRequestDispatcher("/notas.jsp").forward(request, response);
-        }
-    }
+            request.getRequestDispatcher("/introducirNotas.jsp").forward(request, response);
+        } else if ("Seleccionar asignatura".equals(request.getParameter("action"))) {
+             String user = (String) request.getSession(true).getAttribute("user");
 
+            if (user.equals("")) {
+                request.setAttribute("msg", "Debes iniciar sesión.");
+                request.getRequestDispatcher("/login.jsp").forward(request, response);
+            }
+            
+            int idAsignatura = Integer.parseInt(request.getParameter("asignatura"));
+            
+            List<Alumno> alumnos = ejb.getAlumnosByProfesorAsignatura(idAsignatura, user);
+            
+            String msg;
+            if (!asignaturas.isEmpty()) {
+                request.setAttribute("status", STATUS_OK);
+                request.setAttribute("asignaturas", asignaturas);
+            } else {
+                request.setAttribute("status", STATUS_ERROR);
+                msg = "No se han introducido notas.";
+                request.setAttribute("msg", msg);
+            }
+            
+            request.getRequestDispatcher("/introducirNotas.jsp").forward(request, response);
+        }
+         
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

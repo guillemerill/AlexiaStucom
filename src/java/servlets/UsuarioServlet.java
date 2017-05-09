@@ -1,13 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package servlets;
 
 import Util.MD5;
 import beans.AlexiaEJB;
 import entidades.Alumno;
+import entidades.Profesor;
 import java.io.IOException;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -25,7 +21,6 @@ public class UsuarioServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
         if ("Login".equals(request.getParameter("action"))) {
             String user = request.getParameter("nombre_usu");
             String pwd = MD5.getMD5(request.getParameter("password"));
@@ -48,6 +43,19 @@ public class UsuarioServlet extends HttpServlet {
             } else {
                 request.setAttribute("status", STATUS_ERROR);
                 msg = "Ha ocurrido un error al crear el alumno.";
+            }
+            request.setAttribute("msg", msg);
+            request.getRequestDispatcher("/final.jsp").forward(request, response);
+        } else if ("Nuevo profesor".equals(request.getParameter("action"))) {
+            String pwd = MD5.getMD5(request.getParameter("password"));
+            Profesor nuevo = new Profesor(request.getParameter("nombre"), request.getParameter("apellidos"), request.getParameter("nombre_usu"), pwd);
+            String msg;
+            if (ejb.insertProfesor(nuevo)) {
+                request.setAttribute("status", STATUS_OK);
+                msg = "El profesor se ha creado correctamente";
+            } else {
+                request.setAttribute("status", STATUS_ERROR);
+                msg = "Ha ocurrido un error al crear el profesor.";
             }
             request.setAttribute("msg", msg);
             request.getRequestDispatcher("/final.jsp").forward(request, response);

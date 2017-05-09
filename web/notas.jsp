@@ -1,4 +1,4 @@
-<%@page import="entidades.DAONotas"%>
+<%@page import="entidades.NotasDTO"%>
 <%@page import="java.util.List"%>
 <%@page import="entidades.Nota"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -13,7 +13,7 @@
         <h1>Mis notas</h1>
        
         <%
-            List<DAONotas> notas = (List<DAONotas>) request.getAttribute("notas");
+            List<NotasDTO> notas = (List<NotasDTO>) request.getAttribute("notas");
             if (notas.size() == 0) {
         %> 
             <p>No se han encontrado notas.</p>

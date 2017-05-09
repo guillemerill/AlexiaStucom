@@ -9,15 +9,15 @@ package entidades;
  *
  * @author DAM
  */
-public class DAONotas {
+public class NotasDTO {
     private String asignatura;
     private String profesor;
     private Double nota;
 
-    public DAONotas() {
+    public NotasDTO() {
     }
 
-    public DAONotas(String asignatura, String profesor, Double nota) {
+    public NotasDTO(String asignatura, String profesor, Double nota) {
         this.asignatura = asignatura;
         this.profesor = profesor;
         this.nota = nota;

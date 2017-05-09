@@ -29,6 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Asignatura.findAll", query = "SELECT a FROM Asignatura a")
     , @NamedQuery(name = "Asignatura.findByIdasignatura", query = "SELECT a FROM Asignatura a WHERE a.idasignatura = :idasignatura")
+    , @NamedQuery(name = "Asignatura.findByIdasignaturaIn", query = "SELECT a FROM Asignatura a WHERE a.idasignatura IN :idasignatura")
     , @NamedQuery(name = "Asignatura.findByNombre", query = "SELECT a FROM Asignatura a WHERE a.nombre = :nombre")})
 public class Asignatura implements Serializable {
 

@@ -16,10 +16,22 @@
                 <input type="submit" value="Ver notas" name="action">
             </form>
         <% } else if (tipo.equals("PROFESOR")) { %>
-        
+            <form action="ProfesorServlet">
+                <input type="submit" value="Introducir notas">
+            </form>
+        <% } else if (tipo.equals("ADMIN")) {%>
+            <form action="nuevoAlumno.jsp">
+                <input type="submit" value="Crear alumno">
+            </form>
+             <form action="nuevoProfesor.jsp">
+                <input type="submit" value="Crear profesor">
+            </form>
+             <form action="eliminarAlumno.jsp">
+                <input type="submit" value="Eliminar alumno">
+            </form>
+            <form action="eliminarProfesor.jsp">
+                <input type="submit" value="Eliminar profesor">
+            </form>
         <% } %>
-        <form action="nuevoAlumno.jsp">
-            <input type="submit" value="Crear alumno">
-        </form>
     </body>
 </html>
