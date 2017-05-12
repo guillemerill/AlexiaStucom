@@ -60,9 +60,9 @@ public class ProfesorServlet extends HttpServlet {
             List<Alumno> alumnos = ejb.getAlumnosByProfesorAsignatura(idAsignatura, user);
             
             String msg;
-            if (!asignaturas.isEmpty()) {
+            if (!alumnos.isEmpty()) {
                 request.setAttribute("status", STATUS_OK);
-                request.setAttribute("asignaturas", asignaturas);
+                request.setAttribute("alumnos", alumnos);
             } else {
                 request.setAttribute("status", STATUS_ERROR);
                 msg = "No se han introducido notas.";

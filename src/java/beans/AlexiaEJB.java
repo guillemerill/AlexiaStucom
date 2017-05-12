@@ -2,6 +2,7 @@ package beans;
 
 import entidades.Alumno;
 import entidades.Asignatura;
+import entidades.Matricula;
 import entidades.NotasDTO;
 import entidades.Nota;
 import entidades.Profesor;
@@ -100,6 +101,7 @@ public class AlexiaEJB {
         
         return nfinal;
     }
+    
     public List<Asignatura> getAsignaturasByProfesor(String nombre_usu) {
         Profesor p = getProfesorBynombreUsu(nombre_usu);
         List<ProfesorAsignatura> idAsignaturas = emf.createEntityManager().createNamedQuery("findByIdprofesor").setParameter("idprofesor", p.getIdprofesor()).getResultList();
@@ -111,6 +113,19 @@ public class AlexiaEJB {
         List<Asignatura> asignaturas = emf.createEntityManager().createNamedQuery("Asignatura.findByIdasignaturaIn").setParameter("idasignatura", asign).getResultList();
 
         return asignaturas;
+    }
+    
+    public List<Alumno> getAlumnosByProfesorAsignatura(int idAsignatura, String nombre_usu) {
+        Profesor p = getProfesorBynombreUsu(nombre_usu);
+        List<Matricula> idAlumnos = emf.createEntityManager().createNamedQuery("Matricula.findByIdProfesorIdAlumno").setParameter("idProfesor", p.getIdprofesor()).setParameter("idAsignatura", idAsignatura).getResultList();
+        ArrayList<Integer> alumnos = new ArrayList<>();
+        
+        for (Matricula m : idAlumnos) {
+            alumnos.add(m.getIdAlumno());
+        }
+        List<Alumno> alumnosList = emf.createEntityManager().createNamedQuery("Alumno.findByidIn").setParameter("id", alumnos).getResultList();
+
+        return alumnosList;
     }
     
     public String getTipoUsuario(String nombre_usu) {
