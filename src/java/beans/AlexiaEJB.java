@@ -140,4 +140,20 @@ public class AlexiaEJB {
     private String getProfesorById(int idprofesor) {
         return emf.createEntityManager().find(Profesor.class, idprofesor).getNombre();
     }
+    
+    public boolean insertNota(Double nota, int idAlumno, int idAsignatura, String profesor) {
+        Profesor p = getProfesorBynombreUsu(profesor);
+        EntityManager em = emf.createEntityManager();
+        em.persist(new Nota(nota, idAlumno, idAsignatura, p.getIdprofesor()));
+        em.close();
+        return true;
+    }
+    
+    public boolean apuntarProfesorAsignatura(int idAsignatura, String profesor) {
+        Profesor p = getProfesorBynombreUsu(profesor);
+        EntityManager em = emf.createEntityManager();
+        em.persist(new ProfesorAsignatura(idAsignatura, p.getIdprofesor()));
+        em.close();
+        return true;
+    }
 }

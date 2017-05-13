@@ -8,6 +8,7 @@ package servlets;
 import beans.AlexiaEJB;
 import entidades.Alumno;
 import entidades.Asignatura;
+import entidades.ProfesorAsignatura;
 import java.io.IOException;
 import java.util.List;
 import javax.ejb.EJB;
@@ -27,6 +28,47 @@ public class ProfesorServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        if ("Apuntarse a una asignatura".equals(request.getParameter("action"))) {
+            String user = (String) request.getSession(true).getAttribute("user");
+            if (user.equals("")) {
+                request.setAttribute("msg", "Debes iniciar sesión.");
+                request.getRequestDispatcher("/login.jsp").forward(request, response);
+            }
+            
+            List<Asignatura> asignaturas = ejb.getAsignaturasByProfesor(user);
+            
+            String msg;
+            if (!asignaturas.isEmpty()) {
+                request.setAttribute("status", STATUS_OK);
+                request.setAttribute("asignaturas", asignaturas);
+            } else {
+                request.setAttribute("status", STATUS_ERROR);
+                msg = "No hay asignaturas.";
+                request.setAttribute("msg", msg);
+            }
+            
+            request.getRequestDispatcher("/apuntarAsignatura.jsp").forward(request, response);
+        } else if ("Apuntarse".equals(request.getParameter("action"))) {
+            String user = (String) request.getSession(true).getAttribute("user");
+            if (user.equals("")) {
+                request.setAttribute("msg", "Debes iniciar sesión.");
+                request.getRequestDispatcher("/login.jsp").forward(request, response);
+            }
+            
+            int idAsignatura = Integer.parseInt(request.getParameter("asignatura"));
+            
+            String msg;
+            if (ejb.apuntarProfesorAsignatura(idAsignatura, user)) {
+                request.setAttribute("status", STATUS_OK);
+                msg = "La nota se ha introducido correctamente";
+            } else {
+                request.setAttribute("status", STATUS_ERROR);
+                msg = "Ha ocurrido un error al introducir la nota.";
+            }
+            request.setAttribute("msg", msg);
+            request.getRequestDispatcher("/final.jsp").forward(request, response);
+        }
+        
         if ("Introducir notas".equals(request.getParameter("action"))) {
             String user = (String) request.getSession(true).getAttribute("user");
 
@@ -42,7 +84,7 @@ public class ProfesorServlet extends HttpServlet {
                 request.setAttribute("asignaturas", asignaturas);
             } else {
                 request.setAttribute("status", STATUS_ERROR);
-                msg = "No se han introducido notas.";
+                msg = "No hay asignaturas.";
                 request.setAttribute("msg", msg);
             }
             
@@ -63,6 +105,7 @@ public class ProfesorServlet extends HttpServlet {
             if (!alumnos.isEmpty()) {
                 request.setAttribute("status", STATUS_OK);
                 request.setAttribute("alumnos", alumnos);
+                request.setAttribute("asignatura", idAsignatura);
             } else {
                 request.setAttribute("status", STATUS_ERROR);
                 msg = "No se han introducido notas.";
@@ -70,6 +113,27 @@ public class ProfesorServlet extends HttpServlet {
             }
             
             request.getRequestDispatcher("/introducirNotas.jsp").forward(request, response);
+        } else if ("Poner nota".equals(request.getParameter("action"))) {
+            String user = (String) request.getSession(true).getAttribute("user");
+            if (user.equals("")) {
+                request.setAttribute("msg", "Debes iniciar sesión.");
+                request.getRequestDispatcher("/login.jsp").forward(request, response);
+            }
+            
+            Double nota = Double.parseDouble(request.getParameter("nota"));
+            int idAlumno = Integer.parseInt(request.getParameter("alumno"));
+            int idAsignatura = Integer.parseInt(request.getParameter("asignatura"));
+            
+            String msg;
+            if (ejb.insertNota(nota, idAlumno, idAsignatura, user)) {
+                request.setAttribute("status", STATUS_OK);
+                msg = "La nota se ha introducido correctamente";
+            } else {
+                request.setAttribute("status", STATUS_ERROR);
+                msg = "Ha ocurrido un error al introducir la nota.";
+            }
+            request.setAttribute("msg", msg);
+            request.getRequestDispatcher("/final.jsp").forward(request, response);
         }
          
     }

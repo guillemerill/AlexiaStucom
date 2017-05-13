@@ -64,8 +64,7 @@ public class Nota implements Serializable {
         this.idnota = idnota;
     }
 
-    public Nota(Integer idnota, double nota, int idasignatura, int idalumno, int idprofesor) {
-        this.idnota = idnota;
+    public Nota(double nota, int idasignatura, int idalumno, int idprofesor) {
         this.nota = nota;
         this.idasignatura = idasignatura;
         this.idalumno = idalumno;

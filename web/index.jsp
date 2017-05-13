@@ -17,6 +17,9 @@
             </form>
         <% } else if (tipo.equals("PROFESOR")) { %>
             <form action="ProfesorServlet">
+                <input type="submit" value="Apuntarse a una asignatura">
+            </form>
+            <form action="ProfesorServlet">
                 <input type="submit" value="Introducir notas">
             </form>
         <% } else if (tipo.equals("ADMIN")) {%>

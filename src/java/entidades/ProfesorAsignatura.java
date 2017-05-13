@@ -54,8 +54,7 @@ public class ProfesorAsignatura implements Serializable {
         this.idprofesorAsignatura = idprofesorAsignatura;
     }
 
-    public ProfesorAsignatura(Integer idprofesorAsignatura, int idprofesor, int idasignatura) {
-        this.idprofesorAsignatura = idprofesorAsignatura;
+    public ProfesorAsignatura(int idprofesor, int idasignatura) {
         this.idprofesor = idprofesor;
         this.idasignatura = idasignatura;
     }

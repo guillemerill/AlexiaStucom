@@ -32,6 +32,7 @@
         <% } else { %>
         <form action="ProfesorServlet" method="POST">
         <div>Selecciona el alumno</div>
+        <select name="alumno">
             <%
             List<Alumno> alumnos = (List<Alumno>) request.getAttribute("alumno");
                 if (alumnos.size() == 0) {
@@ -42,7 +43,9 @@
                 } else { %>
                     <option value="0">No hay alumnos</option>
             <% } %>
+        </select>
              <p>Nota <input type="number" name="nota"></p>
+             <input type="hidden" name="asignatura" value="<%=request.getAttribute("asignatura")%>"/>
              <p><input type="submit" value="Poner nota" name="action"></p>
         </form>
         <% } %>
