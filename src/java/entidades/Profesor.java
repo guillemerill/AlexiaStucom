@@ -32,7 +32,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Profesor.findByNombre", query = "SELECT p FROM Profesor p WHERE p.nombre = :nombre")
     , @NamedQuery(name = "Profesor.findByApellidos", query = "SELECT p FROM Profesor p WHERE p.apellidos = :apellidos")
     , @NamedQuery(name = "Profesor.findByNombreUsu", query = "SELECT p FROM Profesor p WHERE p.nombreUsu = :nombreUsu")
-    , @NamedQuery(name = "Profesor.findByPass", query = "SELECT p FROM Profesor p WHERE p.pass = :pass")})
+    , @NamedQuery(name = "Profesor.findByPass", query = "SELECT p FROM Profesor p WHERE p.pass = :pass")
+    , @NamedQuery(name = "Profesor.findByIdIn", query = "SELECT p FROM Profesor p WHERE p.id IN :id")
+})
 public class Profesor implements Serializable {
 
     private static final long serialVersionUID = 1L;

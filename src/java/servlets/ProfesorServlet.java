@@ -8,7 +8,6 @@ package servlets;
 import beans.AlexiaEJB;
 import entidades.Alumno;
 import entidades.Asignatura;
-import entidades.ProfesorAsignatura;
 import java.io.IOException;
 import java.util.List;
 import javax.ejb.EJB;
@@ -18,7 +17,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "AlumnoServlet", urlPatterns = {"/AlumnoServlet"})
+@WebServlet(name = "ProfesorServlet", urlPatterns = {"/ProfesorServlet  "})
 public class ProfesorServlet extends HttpServlet {
 
     @EJB AlexiaEJB ejb;
@@ -35,8 +34,9 @@ public class ProfesorServlet extends HttpServlet {
                 request.getRequestDispatcher("/login.jsp").forward(request, response);
             }
             
-            List<Asignatura> asignaturas = ejb.getAsignaturasByProfesor(user);
-            
+            List<Asignatura> asignaturas = ejb.getAllAsignaturas();
+            // TODO: controlar las asignaturas a las que ya se ha apuntado
+
             String msg;
             if (!asignaturas.isEmpty()) {
                 request.setAttribute("status", STATUS_OK);

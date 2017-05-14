@@ -8,7 +8,6 @@ import entidades.Nota;
 import entidades.Profesor;
 import entidades.ProfesorAsignatura;
 import entidades.Usuario;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -21,6 +20,7 @@ public class AlexiaEJB {
     @PersistenceUnit
     EntityManagerFactory emf;
     
+    // Funciones internas para encontrar usuarios
     private Alumno getAlumnoBynombreUsu(String nombre_usu) {
         Alumno a = new Alumno();
         List<Alumno> alumnos = emf.createEntityManager().createNamedQuery("Alumno.findByNombreUsu").setParameter("nombre_usu", nombre_usu).getResultList();
@@ -40,15 +40,6 @@ public class AlexiaEJB {
         return p;
     }
     
-    public boolean login(String nombre_usu, String pwd) {
-        Usuario usu = emf.createEntityManager().find(Usuario.class, nombre_usu);
-        if (usu != null) {
-            if (usu.getPassword().equals(pwd))
-                return true;
-        }
-        return false;
-    }
-    
     private boolean existeUsuario(String nombre_usu) {
         return (emf.createEntityManager().find(Usuario.class, nombre_usu)) != null;
     }
@@ -59,6 +50,30 @@ public class AlexiaEJB {
     
     private boolean existeProfesor(Profesor p) {
         return (emf.createEntityManager().createNamedQuery("Alumno.findByNombreUsu").setParameter("nombreUsu", p.getNombreUsu())) != null;
+    }
+    
+    private String getAsignaturaById(int idasignatura) {
+        return emf.createEntityManager().find(Asignatura.class, idasignatura).getNombre();
+    }
+    
+    private String getProfesorById(int idprofesor) {
+        return emf.createEntityManager().find(Profesor.class, idprofesor).getNombre();
+    }
+       
+    
+    // UsuarioServlet
+    public boolean login(String nombre_usu, String pwd) {
+        Usuario usu = emf.createEntityManager().find(Usuario.class, nombre_usu);
+        if (usu != null) {
+            if (usu.getPassword().equals(pwd))
+                return true;
+        }
+        return false;
+    }
+    
+    public String getTipoUsuario(String nombre_usu) {
+        Usuario usu = emf.createEntityManager().find(Usuario.class, nombre_usu);
+        return usu.getTipo();
     }
 
     public boolean insertAlumno(Alumno a) {
@@ -89,6 +104,31 @@ public class AlexiaEJB {
         return ok;
     }
     
+    // AlumnoServlet
+    public List<Asignatura> getAllAsignaturas() {
+        return emf.createEntityManager().createNamedQuery("Asignatura.findAll").getResultList();
+    }
+    
+    public List<Profesor> getProfesoresByAsignatura(int idAsignatura) {
+        List<ProfesorAsignatura> idProfesores = emf.createEntityManager().createNamedQuery("ProfesorAsignatura.findByIdasignatura").setParameter("idasignatura", idAsignatura).getResultList();
+        ArrayList<Integer> profesores = new ArrayList<>();
+        
+        for (ProfesorAsignatura p : idProfesores) {
+            profesores.add(p.getIdprofesor());
+        }
+        List<Profesor> profesoresList = emf.createEntityManager().createNamedQuery("Profesor.findByidIn").setParameter("id", profesores).getResultList();
+
+        return profesoresList;
+    }
+    
+    public boolean apuntarAlumnoAsignatura(int idAsignatura, int idProfesor, String alumno) {
+        Alumno a = getAlumnoBynombreUsu(alumno);
+        EntityManager em = emf.createEntityManager();
+        em.persist(new Matricula(idAsignatura, a.getIdalumno(), idProfesor));
+        em.close();
+        return true;
+    }
+     
     public List<NotasDTO> getNotasByAlumno(String nombre_usu) {
         Alumno a = getAlumnoBynombreUsu(nombre_usu);
        
@@ -102,6 +142,16 @@ public class AlexiaEJB {
         return nfinal;
     }
     
+    
+    // ProfesorServlet    
+    public boolean apuntarProfesorAsignatura(int idAsignatura, String profesor) {
+        Profesor p = getProfesorBynombreUsu(profesor);
+        EntityManager em = emf.createEntityManager();
+        em.persist(new ProfesorAsignatura(idAsignatura, p.getIdprofesor()));
+        em.close();
+        return true;
+    }
+    
     public List<Asignatura> getAsignaturasByProfesor(String nombre_usu) {
         Profesor p = getProfesorBynombreUsu(nombre_usu);
         List<ProfesorAsignatura> idAsignaturas = emf.createEntityManager().createNamedQuery("findByIdprofesor").setParameter("idprofesor", p.getIdprofesor()).getResultList();
@@ -110,9 +160,7 @@ public class AlexiaEJB {
         for (ProfesorAsignatura a : idAsignaturas) {
             asign.add(a.getIdasignatura());
         }
-        List<Asignatura> asignaturas = emf.createEntityManager().createNamedQuery("Asignatura.findByIdasignaturaIn").setParameter("idasignatura", asign).getResultList();
-
-        return asignaturas;
+        return emf.createEntityManager().createNamedQuery("Asignatura.findByIdasignaturaIn").setParameter("idasignatura", asign).getResultList();
     }
     
     public List<Alumno> getAlumnosByProfesorAsignatura(int idAsignatura, String nombre_usu) {
@@ -126,20 +174,7 @@ public class AlexiaEJB {
         List<Alumno> alumnosList = emf.createEntityManager().createNamedQuery("Alumno.findByidIn").setParameter("id", alumnos).getResultList();
 
         return alumnosList;
-    }
-    
-    public String getTipoUsuario(String nombre_usu) {
-        Usuario usu = emf.createEntityManager().find(Usuario.class, nombre_usu);
-        return usu.getTipo();
-    }
-    
-    private String getAsignaturaById(int idasignatura) {
-        return emf.createEntityManager().find(Asignatura.class, idasignatura).getNombre();
-    }
-    
-    private String getProfesorById(int idprofesor) {
-        return emf.createEntityManager().find(Profesor.class, idprofesor).getNombre();
-    }
+    }    
     
     public boolean insertNota(Double nota, int idAlumno, int idAsignatura, String profesor) {
         Profesor p = getProfesorBynombreUsu(profesor);
@@ -147,13 +182,5 @@ public class AlexiaEJB {
         em.persist(new Nota(nota, idAlumno, idAsignatura, p.getIdprofesor()));
         em.close();
         return true;
-    }
-    
-    public boolean apuntarProfesorAsignatura(int idAsignatura, String profesor) {
-        Profesor p = getProfesorBynombreUsu(profesor);
-        EntityManager em = emf.createEntityManager();
-        em.persist(new ProfesorAsignatura(idAsignatura, p.getIdprofesor()));
-        em.close();
-        return true;
-    }
+    }    
 }

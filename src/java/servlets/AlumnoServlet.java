@@ -1,7 +1,9 @@
 package servlets;
 
 import beans.AlexiaEJB;
+import entidades.Asignatura;
 import entidades.NotasDTO;
+import entidades.Profesor;
 import java.io.IOException;
 import java.util.List;
 import javax.ejb.EJB;
@@ -25,6 +27,71 @@ public class AlumnoServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        if ("Apuntarse a una asignatura".equals(request.getParameter("action"))) {
+            String user = (String) request.getSession(true).getAttribute("user");
+            if (user.equals("")) {
+                request.setAttribute("msg", "Debes iniciar sesión.");
+                request.getRequestDispatcher("/login.jsp").forward(request, response);
+            }
+            
+            List<Asignatura> asignaturas = ejb.getAllAsignaturas();
+            // TODO: controlar las asignaturas a las que ya se ha apuntado
+
+            String msg;
+            if (!asignaturas.isEmpty()) {
+                request.setAttribute("status", STATUS_OK);
+                request.setAttribute("asignaturas", asignaturas);
+            } else {
+                request.setAttribute("status", STATUS_ERROR);
+                msg = "No hay asignaturas.";
+                request.setAttribute("msg", msg);
+            }
+            
+            request.getRequestDispatcher("/apuntarAlumnoAsignatura.jsp").forward(request, response);
+        } else if ("Seleccionar asignatura".equals(request.getParameter("action"))) {
+             String user = (String) request.getSession(true).getAttribute("user");
+            if (user.equals("")) {
+                request.setAttribute("msg", "Debes iniciar sesión.");
+                request.getRequestDispatcher("/login.jsp").forward(request, response);
+            }
+            
+            int idAsignatura = Integer.parseInt(request.getParameter("asignatura"));
+            
+            List<Profesor> profesores = ejb.getProfesoresByAsignatura(idAsignatura);
+            
+            String msg;
+            if (!profesores.isEmpty()) {
+                request.setAttribute("status", STATUS_OK);
+                request.setAttribute("profesores", profesores);
+                request.setAttribute("asignatura", idAsignatura);
+            } else {
+                request.setAttribute("status", STATUS_ERROR);
+                msg = "No se han introducido notas.";
+                request.setAttribute("msg", msg);
+            }
+            
+            request.getRequestDispatcher("/apuntarAlumnoAsignatura.jsp").forward(request, response);
+        } else if ("Apuntarse".equals(request.getParameter("action"))) {
+            String user = (String) request.getSession(true).getAttribute("user");
+            if (user.equals("")) {
+                request.setAttribute("msg", "Debes iniciar sesión.");
+                request.getRequestDispatcher("/login.jsp").forward(request, response);
+            }
+            
+            int idAsignatura = Integer.parseInt(request.getParameter("asignatura"));
+            int idProfesor = Integer.parseInt(request.getParameter("profesor"));
+
+            String msg;
+            if (ejb.apuntarAlumnoAsignatura(idAsignatura, idProfesor, user)) {
+                request.setAttribute("status", STATUS_OK);
+                msg = "Te has apuntado correctamente.";
+            } else {
+                request.setAttribute("status", STATUS_ERROR);
+                msg = "Ha ocurrido un error al apuntarte.";
+            }
+            request.setAttribute("msg", msg);
+            request.getRequestDispatcher("/final.jsp").forward(request, response);
+        }
         
         if ("Ver notas".equals(request.getParameter("action"))) {
             String user = (String) request.getSession(true).getAttribute("user");

@@ -12,15 +12,18 @@
         %> 
             <p>Hola, <%=request.getSession(true).getAttribute("user") %>!</p> 
         <% if (tipo.equals("ALUMNO")) { %>
+        <form action="AlumnoServlet">
+                <input type="submit" value="Apuntarse a una asignatura" name="action">
+            </form>
             <form action="AlumnoServlet">
                 <input type="submit" value="Ver notas" name="action">
             </form>
         <% } else if (tipo.equals("PROFESOR")) { %>
             <form action="ProfesorServlet">
-                <input type="submit" value="Apuntarse a una asignatura">
+                <input type="submit" value="Apuntarse a una asignatura" name="action">
             </form>
             <form action="ProfesorServlet">
-                <input type="submit" value="Introducir notas">
+                <input type="submit" value="Introducir notas" name="action">
             </form>
         <% } else if (tipo.equals("ADMIN")) {%>
             <form action="nuevoAlumno.jsp">

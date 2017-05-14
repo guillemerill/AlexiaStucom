@@ -67,6 +67,11 @@ public class Matricula implements Serializable {
         this.idProfesor = idProfesor;
     }
 
+    public Matricula(int idAsignatura, int idAlumno, int idProfesor) {
+        this.idAsignatura = idAsignatura;
+        this.idAlumno = idAlumno;
+        this.idProfesor = idProfesor;    }
+
     public Integer getId() {
         return id;
     }
