@@ -21,6 +21,16 @@ public class AlexiaEJB {
     EntityManagerFactory emf;
     
     // Funciones internas para encontrar usuarios
+    private Usuario getUsuarioBynombreUsu(String nombre_usu) {
+        Usuario a = new Usuario();
+        List<Usuario> usuarios = emf.createEntityManager().createNamedQuery("Usuario.findByNombreUsu").setParameter("nombre_usu", nombre_usu).getResultList();
+        if (!usuarios.isEmpty()) {
+            a = usuarios.get(0);
+        }
+           
+        return a;
+    }
+    
     private Alumno getAlumnoBynombreUsu(String nombre_usu) {
         Alumno a = new Alumno();
         List<Alumno> alumnos = emf.createEntityManager().createNamedQuery("Alumno.findByNombreUsu").setParameter("nombre_usu", nombre_usu).getResultList();
@@ -49,7 +59,7 @@ public class AlexiaEJB {
     }
     
     private boolean existeProfesor(Profesor p) {
-        return (emf.createEntityManager().createNamedQuery("Alumno.findByNombreUsu").setParameter("nombreUsu", p.getNombreUsu())) != null;
+        return (emf.createEntityManager().createNamedQuery("Profesor.findByNombreUsu").setParameter("nombreUsu", p.getNombreUsu())) != null;
     }
     
     private String getAsignaturaById(int idasignatura) {
@@ -58,6 +68,10 @@ public class AlexiaEJB {
     
     private String getProfesorById(int idprofesor) {
         return emf.createEntityManager().find(Profesor.class, idprofesor).getNombre();
+    }
+    
+    private String getAlumnoById(int idAlumno) {
+        return emf.createEntityManager().find(Alumno.class, idAlumno).getNombre();
     }
        
     
@@ -104,6 +118,51 @@ public class AlexiaEJB {
         return ok;
     }
     
+    
+    // AdminServlet
+    public List<Alumno> getAllAlumnos() {
+        return emf.createEntityManager().createNamedQuery("Alumno.findAll").getResultList();
+    }
+    
+    public boolean eliminarAlumno(int idAlumno) {
+        EntityManager em = emf.createEntityManager();
+        Alumno alumno = getAlumnoBynombreUsu(getAlumnoById(idAlumno));
+        boolean ok = false;
+        if (alumno != null) {
+            Usuario u = getUsuarioBynombreUsu(alumno.getNombreUsu());
+            if (u != null) {
+                em.remove(u);
+            }
+
+            em.remove(alumno);
+            ok = true;
+        } 
+        em.close();
+        return ok;
+    }
+        
+    public List<Profesor> getAllProfesor() {
+        return emf.createEntityManager().createNamedQuery("Profesor.findAll").getResultList();
+    }
+    
+     public boolean eliminarProfesor(int idProfesor) {
+        EntityManager em = emf.createEntityManager();
+        Profesor profesor = getProfesorBynombreUsu(getProfesorById(idProfesor));
+        boolean ok = false;
+        if (profesor != null) {
+            Usuario u = getUsuarioBynombreUsu(profesor.getNombreUsu());
+            if (u != null) {
+                em.remove(u);
+            }
+
+            em.remove(profesor);
+            ok = true;
+        } 
+        em.close();
+        return ok;
+    }
+    
+     
     // AlumnoServlet
     public List<Asignatura> getAllAsignaturas() {
         return emf.createEntityManager().createNamedQuery("Asignatura.findAll").getResultList();
@@ -154,7 +213,7 @@ public class AlexiaEJB {
     
     public List<Asignatura> getAsignaturasByProfesor(String nombre_usu) {
         Profesor p = getProfesorBynombreUsu(nombre_usu);
-        List<ProfesorAsignatura> idAsignaturas = emf.createEntityManager().createNamedQuery("findByIdprofesor").setParameter("idprofesor", p.getIdprofesor()).getResultList();
+        List<ProfesorAsignatura> idAsignaturas = emf.createEntityManager().createNamedQuery("Asignatura.findByIdprofesor").setParameter("idprofesor", p.getIdprofesor()).getResultList();
         ArrayList<Integer> asign = new ArrayList<>();
         
         for (ProfesorAsignatura a : idAsignaturas) {
