@@ -63,7 +63,8 @@ public class AlexiaEJB {
     }
     
     private boolean existeAsignatura(Asignatura a) {
-        return (emf.createEntityManager().createNamedQuery("Asignatura.findByNombre").setParameter("nombre", a.getNombre())) != null;
+        List<Asignatura> as = emf.createEntityManager().createNamedQuery("Asignatura.findByNombre").setParameter("nombre", a.getNombre()).getResultList();
+        return !as.isEmpty();
     }
     
     private String getAsignaturaById(int idasignatura) {
