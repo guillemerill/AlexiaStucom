@@ -2,6 +2,7 @@ package servlets;
 
 import beans.AlexiaEJB;
 import entidades.Alumno;
+import entidades.Asignatura;
 import entidades.Profesor;
 import java.io.IOException;
 import java.util.List;
@@ -23,6 +24,48 @@ public class AdminServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        
+        if ("Eliminar asignatura".equals(request.getParameter("action"))) {
+            String user = (String) request.getSession(true).getAttribute("user");
+            if (user.equals("")) {
+                request.setAttribute("msg", "Debes iniciar sesión.");
+                request.getRequestDispatcher("/login.jsp").forward(request, response);
+            }
+            
+            List<Asignatura> asignaturas = ejb.getAllAsignaturas();
+
+            String msg;
+            if (!asignaturas.isEmpty()) {
+                request.setAttribute("status", STATUS_OK);
+                request.setAttribute("asignaturas", asignaturas);
+            } else {
+                request.setAttribute("status", STATUS_ERROR);
+                msg = "No hay asignaturas.";
+                request.setAttribute("msg", msg);
+            }
+            
+            request.getRequestDispatcher("/eliminarAsignatura.jsp").forward(request, response);
+        } else if ("Eliminar esta asignatura".equals(request.getParameter("action"))) {
+            String user = (String) request.getSession(true).getAttribute("user");
+            if (user.equals("")) {
+                request.setAttribute("msg", "Debes iniciar sesión.");
+                request.getRequestDispatcher("/login.jsp").forward(request, response);
+            }
+            
+            int idAsignatura = Integer.parseInt(request.getParameter("asignatura"));
+// TODO: id 0
+            String msg;
+            if (ejb.eliminarProfesor(idAsignatura)) {
+                request.setAttribute("status", STATUS_OK);
+                msg = "La asignatura se ha eliminado correctamente.";
+            } else {
+                request.setAttribute("status", STATUS_ERROR);
+                msg = "Ha ocurrido un error al eliminar la asignatura.";
+            }
+            request.setAttribute("msg", msg);
+            request.getRequestDispatcher("/final.jsp").forward(request, response);
+        }
+        
         if ("Eliminar alumno".equals(request.getParameter("action"))) {
             String user = (String) request.getSession(true).getAttribute("user");
             if (user.equals("")) {
@@ -100,6 +143,20 @@ public class AdminServlet extends HttpServlet {
             } else {
                 request.setAttribute("status", STATUS_ERROR);
                 msg = "Ha ocurrido un error al eliminar el profesor.";
+            }
+            request.setAttribute("msg", msg);
+            request.getRequestDispatcher("/final.jsp").forward(request, response);
+        }
+        
+        if ("Nueva asignatura".equals(request.getParameter("action"))) {
+            Asignatura asignatura = new Asignatura(request.getParameter("nombre"));
+            String msg;
+            if (ejb.insertAsignatura(asignatura)) {
+                request.setAttribute("status", STATUS_OK);
+                msg = "La asignatura se ha creado correctamente";
+            } else {
+                request.setAttribute("status", STATUS_ERROR);
+                msg = "Ha ocurrido un error al crear la asignatura.";
             }
             request.setAttribute("msg", msg);
             request.getRequestDispatcher("/final.jsp").forward(request, response);

@@ -56,6 +56,10 @@ public class Asignatura implements Serializable {
         this.idasignatura = idasignatura;
         this.nombre = nombre;
     }
+    
+    public Asignatura(String nombre) {
+        this.nombre = nombre;
+    }
 
     public Integer getIdasignatura() {
         return idasignatura;
@@ -95,7 +99,7 @@ public class Asignatura implements Serializable {
 
     @Override
     public String toString() {
-        return "entidades.Asignatura[ idasignatura=" + idasignatura + " ]";
+        return "entidades.Asignatura[ idasignatura=" + idasignatura + ", nombre=" + nombre + " ]";
     }
     
 }

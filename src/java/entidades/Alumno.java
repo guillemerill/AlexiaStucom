@@ -31,10 +31,10 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Alumno.findByIdalumno", query = "SELECT a FROM Alumno a WHERE a.idalumno = :idalumno")
     , @NamedQuery(name = "Alumno.findByNombre", query = "SELECT a FROM Alumno a WHERE a.nombre = :nombre")
     , @NamedQuery(name = "Alumno.findByApellidos", query = "SELECT a FROM Alumno a WHERE a.apellidos = :apellidos")
-    , @NamedQuery(name = "Alumno.findByNombreUsu", query = "SELECT a FROM Alumno a WHERE a.nombreUsu = :nombreUsu")
+    , @NamedQuery(name = "Alumno.findByNombreUsu", query = "SELECT a FROM Alumno a WHERE a.nombre_usu = :nombre_usu")
     , @NamedQuery(name = "Alumno.findByPass", query = "SELECT a FROM Alumno a WHERE a.pass = :pass")
     , @NamedQuery(name = "Alumno.findByCurso", query = "SELECT a FROM Alumno a WHERE a.curso = :curso")
-    , @NamedQuery(name = "Alumno.findByIdIn", query = "SELECT a FROM Alumno a WHERE a.id IN :id")
+    , @NamedQuery(name = "Alumno.findByIdIn", query = "SELECT a FROM Alumno a WHERE a.idalumno IN :id")
 })
 public class Alumno implements Serializable {
 
@@ -58,7 +58,7 @@ public class Alumno implements Serializable {
     @NotNull
     @Size(min = 1, max = 45)
     @Column(name = "nombre_usu")
-    private String nombreUsu;
+    private String nombre_usu;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
@@ -77,17 +77,21 @@ public class Alumno implements Serializable {
         this.idalumno = idalumno;
     }
 
-    public Alumno(Integer idalumno, String nombre, String apellidos, String nombreUsu, String pass, String curso) {
+    public Alumno(Integer idalumno, String nombre, String apellidos, String nombre_usu, String pass, String curso) {
         this.idalumno = idalumno;
         this.nombre = nombre;
         this.apellidos = apellidos;
-        this.nombreUsu = nombreUsu;
+        this.nombre_usu = nombre_usu;
         this.pass = pass;
         this.curso = curso;
     }
 
-    public Alumno(String parameter, String parameter0, String parameter1, String pwd, String parameter2) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Alumno(String nombre, String apellidos, String nombre_usu, String pass, String curso) {
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.nombre_usu = nombre_usu;
+        this.pass = pass;
+        this.curso = curso;
     }
 
     public Integer getIdalumno() {
@@ -115,11 +119,11 @@ public class Alumno implements Serializable {
     }
 
     public String getNombreUsu() {
-        return nombreUsu;
+        return nombre_usu;
     }
 
-    public void setNombreUsu(String nombreUsu) {
-        this.nombreUsu = nombreUsu;
+    public void setNombreUsu(String nombre_usu) {
+        this.nombre_usu = nombre_usu;
     }
 
     public String getPass() {

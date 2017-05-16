@@ -11,7 +11,6 @@
     <body>
         <p>Selecciona una asignatura</p>
          <form action="ProfesorServlet" method="POST">
-            <div>Selecciona la asignatura</div>
             <select name="asignatura">
              <%
                 List<Asignatura> asignaturas = (List<Asignatura>) request.getAttribute("asignaturas");

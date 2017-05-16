@@ -55,11 +55,15 @@ public class AlexiaEJB {
     }
 
     private boolean existeAlumno(Alumno a) {
-        return (emf.createEntityManager().createNamedQuery("Alumno.findByNombreUsu").setParameter("nombreUsu", a.getNombreUsu())) != null;
+        return (emf.createEntityManager().createNamedQuery("Alumno.findByNombreUsu").setParameter("nombre_usu", a.getNombreUsu())) != null;
     }
     
     private boolean existeProfesor(Profesor p) {
         return (emf.createEntityManager().createNamedQuery("Profesor.findByNombreUsu").setParameter("nombreUsu", p.getNombreUsu())) != null;
+    }
+    
+    private boolean existeAsignatura(Asignatura a) {
+        return (emf.createEntityManager().createNamedQuery("Asignatura.findByNombre").setParameter("nombre", a.getNombre())) != null;
     }
     
     private String getAsignaturaById(int idasignatura) {
@@ -120,6 +124,19 @@ public class AlexiaEJB {
     
     
     // AdminServlet
+    public boolean insertAsignatura(Asignatura a) {
+        EntityManager em = emf.createEntityManager();
+        boolean ok = false;
+        System.out.println(a.toString());
+        if (!existeAsignatura(a)) {
+            em.persist(a);
+            ok = true;
+        }
+        System.out.println(existeAsignatura(a));
+        em.close();
+        return ok;
+    }
+    
     public List<Alumno> getAllAlumnos() {
         return emf.createEntityManager().createNamedQuery("Alumno.findAll").getResultList();
     }
