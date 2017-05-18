@@ -29,5 +29,8 @@
         <form action="UsuarioServlet">
             <input type="submit" value="Volver al menu" name="action">
         </form>
+                    <form action="UsuarioServlet">
+            <input type="submit" value="Volver al menu" name="action">
+        </form>
     </body>
 </html>
