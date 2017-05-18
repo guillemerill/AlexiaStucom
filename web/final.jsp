@@ -16,6 +16,8 @@
         <% } else if (status.equals("Error")) { %>
             <p><%=msg %></p> 
         <% } %>
-        <a href="index.jsp">Main menu</a>
+        <form action="UsuarioServlet">
+            <input type="submit" value="Volver al menu" name="action">
+        </form>
     </body>
 </html>

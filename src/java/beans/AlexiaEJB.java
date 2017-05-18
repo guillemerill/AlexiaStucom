@@ -54,6 +54,7 @@ public class AlexiaEJB {
         return (emf.createEntityManager().find(Usuario.class, nombre_usu)) != null;
     }
 
+    
     private boolean existeAlumno(Alumno a) {
         return !emf.createEntityManager().createNamedQuery("Alumno.findByNombreUsu").setParameter("nombre_usu", a.getNombreUsu()).getResultList().isEmpty();
     }

@@ -33,6 +33,16 @@ public class UsuarioServlet extends HttpServlet {
                 request.setAttribute("status", STATUS_ERROR);
                 request.getRequestDispatcher("/login.jsp").forward(request, response);
             }
+        } else if ("Volver al menu".equals(request.getParameter("action"))) {
+            String user = (String) request.getSession(true).getAttribute("user");
+            if (request.getSession(true).getAttribute("user") != null) {
+                request.setAttribute("status", STATUS_OK);
+                request.setAttribute("tipo", ejb.getTipoUsuario(user));
+                request.getRequestDispatcher("/index.jsp").forward(request, response);
+            } else {
+                request.setAttribute("status", STATUS_ERROR);
+                request.getRequestDispatcher("/login.jsp").forward(request, response);
+            }
         } else if ("Nuevo alumno".equals(request.getParameter("action"))) {
             String pwd = MD5.getMD5(request.getParameter("password"));
             Alumno nuevo = new Alumno(request.getParameter("nombre"), request.getParameter("apellidos"), request.getParameter("nombre_usu"), pwd, request.getParameter("curso"));
