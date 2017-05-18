@@ -11,19 +11,18 @@
     <body>
         <p>Selecciona un alumno</p>
         <form action="AdminServlet" method="POST">
-            <div>Selecciona el alumno</div>
-            <select name="alumno">
                 <%
                 List<Alumno> alumnos = (List<Alumno>) request.getAttribute("alumnos");
-                    if (alumnos.size() > 0) {
-                       for (Alumno a : alumnos) { 
-                %> 
-                        <option value="<%=a.getIdalumno()%>"><%=a.getNombre()%> <%=a.getApellidos()%></option>
-                    <% }        
-                    } else { %>
-                        <option value="0">No hay alumnos</option>
+                if (alumnos.size() > 0) { %>
+                    <select name="alumno">
+                        <% for (Alumno a : alumnos) { %> 
+                                <option value="<%=a.getIdalumno()%>"><%=a.getNombre()%> <%=a.getApellidos()%></option>
+                        <% }  %>
+                    </select>
+                <% } else { %>
+                    <div>No hay alumnos.</div>
                 <% } %>
-            </select>
+            
              <p><input type="submit" value="Eliminar este alumno" name="action"></p>
         </form>
         <form action="UsuarioServlet">
