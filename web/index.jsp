@@ -19,21 +19,12 @@
                 <form action="AlumnoServlet">
                     <input type="submit" value="Ver notas" name="action">
                 </form>
-                <form action="AlumnoServlet">
-                    <input type="submit" value="Ver faltas" name="action">
-                </form>
             <% } else if (tipo.equals("PROFESOR")) { %>
                 <form action="ProfesorServlet">
                     <input type="submit" value="Apuntarse a una asignatura" name="action">
                 </form>
                 <form action="ProfesorServlet">
-                    <input type="submit" value="Ver alumnos" name="action">
-                </form>
-                <form action="ProfesorServlet">
                     <input type="submit" value="Introducir notas" name="action">
-                </form>
-                <form action="ProfesorServlet">
-                    <input type="submit" value="Introducir faltas" name="action">
                 </form>
             <% } else if (tipo.equals("ADMIN")) {%>
              <form action="nuevaAsignatura.jsp">

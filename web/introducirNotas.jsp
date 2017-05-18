@@ -9,44 +9,46 @@
         <title>Introducr notas</title>
     </head>
     <body>
-        <p>Selecciona una asignatura</p>
         <%
            if (request.getAttribute("alumnos") == null) {
         %>
          <form action="ProfesorServlet" method="POST">
             <div>Selecciona la asignatura</div>
-            <select name="asignatura">
+            
              <%
                 List<Asignatura> asignaturas = (List<Asignatura>) request.getAttribute("asignaturas");
-                if (asignaturas.size() == 0) {
-                   for (Asignatura a : asignaturas) { 
+                if (asignaturas.size() > 0) { %>
+                <select name="asignatura">
+                  <% for (Asignatura a : asignaturas) { 
             %> 
                     <option value="<%=a.getIdasignatura()%>"><%=a.getNombre()%></option>
-                <% }        
-                } else { %>
-                    <option value="0">No hay asignaturas</option>
-            <% } %>
-            </select>
+                <% }    %>
+                </select>
             <p><input type="submit" value="Seleccionar asignatura" name="action"></p>
+               <% } else { %>
+                <div> No hay asignaturas.</div>
+            <% } %>
+            
         </form>
         <% } else { %>
         <form action="ProfesorServlet" method="POST">
-        <div>Selecciona el alumno</div>
-        <select name="alumno">
+        
             <%
-            List<Alumno> alumnos = (List<Alumno>) request.getAttribute("alumno");
-                if (alumnos.size() == 0) {
-                   for (Alumno a : alumnos) { 
-            %> 
-                    <option value="<%=a.getIdalumno()%>"><%=a.getNombre()%> <%=a.getApellidos()%></option>
-                <% }        
-                } else { %>
-                    <option value="0">No hay alumnos</option>
-            <% } %>
-        </select>
-             <p>Nota <input type="number" name="nota"></p>
-             <input type="hidden" name="asignatura" value="<%=request.getAttribute("asignatura")%>"/>
-             <p><input type="submit" value="Poner nota" name="action"></p>
+            List<Alumno> alumnos = (List<Alumno>) request.getAttribute("alumnos");
+                if (alumnos.size() == 0) { %>
+                        <div>Selecciona el alumno</div>
+                        <select name="alumno">
+                         <%  for (Alumno a : alumnos) { 
+                    %> 
+                            <option value="<%=a.getIdalumno()%>"><%=a.getNombre()%> <%=a.getApellidos()%></option>
+                        <% }   %>
+                        </select>
+                     <p>Nota <input type="number" name="nota"></p>
+                     <input type="hidden" name="asignatura" value="<%=request.getAttribute("asignatura")%>"/>
+                     <p><input type="submit" value="Poner nota" name="action"></p>
+                <% } else { %>
+                    <div>No hay alumnos</div>
+                <% } %>
         </form>
         <% } %>
         <form action="UsuarioServlet">

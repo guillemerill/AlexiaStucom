@@ -60,10 +60,10 @@ public class ProfesorServlet extends HttpServlet {
             String msg;
             if (ejb.apuntarProfesorAsignatura(idAsignatura, user)) {
                 request.setAttribute("status", STATUS_OK);
-                msg = "La nota se ha introducido correctamente";
+                msg = "Te has apuntado correctamente";
             } else {
                 request.setAttribute("status", STATUS_ERROR);
-                msg = "Ha ocurrido un error al introducir la nota.";
+                msg = "Ha ocurrido un error al apuntarse.";
             }
             request.setAttribute("msg", msg);
             request.getRequestDispatcher("/final.jsp").forward(request, response);
@@ -91,7 +91,6 @@ public class ProfesorServlet extends HttpServlet {
             request.getRequestDispatcher("/introducirNotas.jsp").forward(request, response);
         } else if ("Seleccionar asignatura".equals(request.getParameter("action"))) {
              String user = (String) request.getSession(true).getAttribute("user");
-
             if (user.equals("")) {
                 request.setAttribute("msg", "Debes iniciar sesión.");
                 request.getRequestDispatcher("/login.jsp").forward(request, response);

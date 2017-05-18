@@ -48,7 +48,9 @@ public class AlumnoServlet extends HttpServlet {
             }
             
             request.getRequestDispatcher("/apuntarAlumnoAsignatura.jsp").forward(request, response);
-        } else if ("Seleccionar asignatura".equals(request.getParameter("action"))) {
+        }
+        
+        if ("Seleccionar".equalsIgnoreCase(request.getParameter("select"))) {
              String user = (String) request.getSession(true).getAttribute("user");
             if (user.equals("")) {
                 request.setAttribute("msg", "Debes iniciar sesión.");
@@ -71,7 +73,8 @@ public class AlumnoServlet extends HttpServlet {
             }
             
             request.getRequestDispatcher("/apuntarAlumnoAsignatura.jsp").forward(request, response);
-        } else if ("Apuntarse".equals(request.getParameter("action"))) {
+        } 
+        if ("Apuntarse".equals(request.getParameter("action"))) {
             String user = (String) request.getSession(true).getAttribute("user");
             if (user.equals("")) {
                 request.setAttribute("msg", "Debes iniciar sesión.");
@@ -95,7 +98,6 @@ public class AlumnoServlet extends HttpServlet {
         
         if ("Ver notas".equals(request.getParameter("action"))) {
             String user = (String) request.getSession(true).getAttribute("user");
-
             if (user.equals("")) {
                 request.setAttribute("msg", "Debes iniciar sesión.");
                 request.getRequestDispatcher("/login.jsp").forward(request, response);
@@ -106,13 +108,16 @@ public class AlumnoServlet extends HttpServlet {
             if (!notas.isEmpty()) {
                 request.setAttribute("status", STATUS_OK);
                 request.setAttribute("notas", notas);
+                request.getRequestDispatcher("/notas.jsp").forward(request, response);
+
             } else {
                 request.setAttribute("status", STATUS_ERROR);
-                msg = "No se han introducido notas.";
+                msg = "No tienes notas.";
                 request.setAttribute("msg", msg);
+                request.getRequestDispatcher("/final.jsp").forward(request, response);
+
             }
             
-            request.getRequestDispatcher("/notas.jsp").forward(request, response);
         }
     }
 

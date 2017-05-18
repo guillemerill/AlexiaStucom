@@ -10,7 +10,6 @@
         <title>Apuntate a una asignatura</title>
     </head>
     <body>
-        <p>Selecciona una asignatura</p>
         <%
            if (request.getAttribute("profesores") == null) {
         %>
@@ -19,7 +18,7 @@
             <select name="asignatura">
              <%
                 List<Asignatura> asignaturas = (List<Asignatura>) request.getAttribute("asignaturas");
-                if (asignaturas.size() == 0) {
+                if (asignaturas.size() > 0) {
                    for (Asignatura a : asignaturas) { 
             %> 
                     <option value="<%=a.getIdasignatura()%>"><%=a.getNombre()%></option>
@@ -28,7 +27,7 @@
                     <option value="0">No hay asignaturas</option>
             <% } %>
             </select>
-            <p><input type="submit" value="Seleccionar asignatura" name="action"></p>
+            <p><input type="submit" value="Seleccionar" name="select"></p>
         </form>
         <% } else { %>
         <form action="UsuarioServlet" method="POST">

@@ -247,7 +247,7 @@ public class AlexiaEJB {
     
     public List<Asignatura> getAsignaturasByProfesor(String nombre_usu) {
         Profesor p = getProfesorBynombreUsu(nombre_usu);
-        List<ProfesorAsignatura> idAsignaturas = emf.createEntityManager().createNamedQuery("Asignatura.findByIdprofesor").setParameter("idprofesor", p.getIdprofesor()).getResultList();
+        List<ProfesorAsignatura> idAsignaturas = emf.createEntityManager().createNamedQuery("ProfesorAsignatura.findByIdprofesor").setParameter("idprofesor", p.getIdprofesor()).getResultList();
         ArrayList<Integer> asign = new ArrayList<>();
         
         for (ProfesorAsignatura a : idAsignaturas) {
@@ -264,7 +264,7 @@ public class AlexiaEJB {
         for (Matricula m : idAlumnos) {
             alumnos.add(m.getIdAlumno());
         }
-        List<Alumno> alumnosList = emf.createEntityManager().createNamedQuery("Alumno.findByidIn").setParameter("id", alumnos).getResultList();
+        List<Alumno> alumnosList = emf.createEntityManager().createNamedQuery("Alumno.findByIdIn").setParameter("id", alumnos).getResultList();
 
         return alumnosList;
     }    

@@ -29,7 +29,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <% for(DAONotas n : notas) {%>
+                    <% for(NotasDTO n : notas) {%>
                         <tr>
                             <td><%=n.getAsignatura() %></td>
                             <td><%=n.getProfesor() %></td>
@@ -41,7 +41,6 @@
 
         
         <% } %>
-   >
            <form action="UsuarioServlet">
             <input type="submit" value="Volver al menu" name="action">
         </form>
