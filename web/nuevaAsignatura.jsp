@@ -11,5 +11,8 @@
             <p>Nombre asignatura: <input required="true" type="text" name="nombre"></p>
             <p><input type="submit" value="Nueva asignatura" name="action"></p>
         </form>
+                <form action="UsuarioServlet">
+            <input type="submit" value="Volver al menu" name="action">
+        </form>
     </body>
 </html>
