@@ -27,6 +27,8 @@
             </select>
              <p><input type="submit" value="Eliminar este profesor" name="action"></p>
         </form>
-        <a href="index.jsp">Main menu</a>
+                <form action="UsuarioServlet">
+            <input type="submit" value="Volver al menu" name="action">
+        </form>
     </body>
 </html>

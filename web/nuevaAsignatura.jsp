@@ -8,7 +8,7 @@
     <body>
         <h1>Nueva asignatura</h1>
         <form action="AdminServlet" method="POST">
-            <p>Nombre asignatura: <input type="text" name="nombre"></p>
+            <p>Nombre asignatura: <input required="true" type="text" name="nombre"></p>
             <p><input type="submit" value="Nueva asignatura" name="action"></p>
         </form>
     </body>
