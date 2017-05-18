@@ -16,7 +16,7 @@
         %>
         <form action="UsuarioServlet" method="POST">
             <p>Nombre de usuario: <input type="text" name="nombre_usu" required></p>
-            <p>Password: <input type="text" name="password" required></p>
+            <p>Password: <input type="password" name="password" required></p>
             <div><input type="submit" value="Login" name="action"></div>
             <% if (status.equals("Error")) { %>
             <div style="color: red">Los datos son incorrectos</div>

@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u")
-    , @NamedQuery(name = "Usuario.findByNombreUsu", query = "SELECT u FROM Usuario u WHERE u.nombreUsu = :nombreUsu")
+    , @NamedQuery(name = "Usuario.findByNombreUsu", query = "SELECT u FROM Usuario u WHERE u.nombre_usu = :nombre_usu")
     , @NamedQuery(name = "Usuario.findByPassword", query = "SELECT u FROM Usuario u WHERE u.password = :password")
     , @NamedQuery(name = "Usuario.findByTipo", query = "SELECT u FROM Usuario u WHERE u.tipo = :tipo")})
 public class Usuario implements Serializable {
@@ -37,7 +37,7 @@ public class Usuario implements Serializable {
     @NotNull
     @Size(min = 1, max = 100)
     @Column(name = "nombre_usu")
-    private String nombreUsu;
+    private String nombre_usu;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
@@ -52,22 +52,22 @@ public class Usuario implements Serializable {
     public Usuario() {
     }
 
-    public Usuario(String nombreUsu) {
-        this.nombreUsu = nombreUsu;
+    public Usuario(String nombre_usu) {
+        this.nombre_usu = nombre_usu;
     }
 
-    public Usuario(String nombreUsu, String password, String tipo) {
-        this.nombreUsu = nombreUsu;
+    public Usuario(String nombre_usu, String password, String tipo) {
+        this.nombre_usu = nombre_usu;
         this.password = password;
         this.tipo = tipo;
     }
 
     public String getNombreUsu() {
-        return nombreUsu;
+        return nombre_usu;
     }
 
-    public void setNombreUsu(String nombreUsu) {
-        this.nombreUsu = nombreUsu;
+    public void setNombreUsu(String nombre_usu) {
+        this.nombre_usu = nombre_usu;
     }
 
     public String getPassword() {
@@ -89,7 +89,7 @@ public class Usuario implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (nombreUsu != null ? nombreUsu.hashCode() : 0);
+        hash += (nombre_usu != null ? nombre_usu.hashCode() : 0);
         return hash;
     }
 
@@ -100,7 +100,7 @@ public class Usuario implements Serializable {
             return false;
         }
         Usuario other = (Usuario) object;
-        if ((this.nombreUsu == null && other.nombreUsu != null) || (this.nombreUsu != null && !this.nombreUsu.equals(other.nombreUsu))) {
+        if ((this.nombre_usu == null && other.nombre_usu != null) || (this.nombre_usu != null && !this.nombre_usu.equals(other.nombre_usu))) {
             return false;
         }
         return true;
@@ -108,7 +108,7 @@ public class Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return "entidades.Usuario[ nombreUsu=" + nombreUsu + " ]";
+        return "entidades.Usuario[ nombreUsu=" + nombre_usu + " ]";
     }
     
 }

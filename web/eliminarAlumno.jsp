@@ -15,7 +15,7 @@
             <select name="alumno">
                 <%
                 List<Alumno> alumnos = (List<Alumno>) request.getAttribute("alumnos");
-                    if (alumnos.size() == 0) {
+                    if (alumnos.size() > 0) {
                        for (Alumno a : alumnos) { 
                 %> 
                         <option value="<%=a.getIdalumno()%>"><%=a.getNombre()%> <%=a.getApellidos()%></option>
@@ -26,6 +26,8 @@
             </select>
              <p><input type="submit" value="Eliminar este alumno" name="action"></p>
         </form>
-        <a href="index.jsp">Main menu</a>
+        <form action="UsuarioServlet">
+            <input type="submit" value="Volver al menu" name="action">
+        </form>
     </body>
 </html>

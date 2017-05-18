@@ -67,8 +67,8 @@ public class AlexiaEJB {
         return !emf.createEntityManager().createNamedQuery("Asignatura.findByNombre").setParameter("nombre", a.getNombre()).getResultList().isEmpty();
     }
     
-    private String getAsignaturaById(int idasignatura) {
-        return emf.createEntityManager().find(Asignatura.class, idasignatura).getNombre();
+    private Asignatura getAsignaturaById(int idasignatura) {
+        return emf.createEntityManager().find(Asignatura.class, idasignatura);
     }
     
     private String getProfesorById(int idprofesor) {
@@ -78,7 +78,7 @@ public class AlexiaEJB {
     private String getAlumnoById(int idAlumno) {
         return emf.createEntityManager().find(Alumno.class, idAlumno).getNombre();
     }
-       
+    
     
     // UsuarioServlet
     public boolean login(String nombre_usu, String pwd) {
@@ -151,7 +151,7 @@ public class AlexiaEJB {
             if (u != null) {
                 em.remove(u);
             }
-
+            alumno = em.merge(alumno);
             em.remove(alumno);
             ok = true;
         } 
@@ -163,7 +163,7 @@ public class AlexiaEJB {
         return emf.createEntityManager().createNamedQuery("Profesor.findAll").getResultList();
     }
     
-     public boolean eliminarProfesor(int idProfesor) {
+    public boolean eliminarProfesor(int idProfesor) {
         EntityManager em = emf.createEntityManager();
         Profesor profesor = getProfesorBynombreUsu(getProfesorById(idProfesor));
         boolean ok = false;
@@ -174,6 +174,20 @@ public class AlexiaEJB {
             }
 
             em.remove(profesor);
+            ok = true;
+        } 
+        em.close();
+        return ok;
+    }
+    
+    
+    public boolean eliminarAsignatura(int idAsignatura) {
+        EntityManager em = emf.createEntityManager();
+        Asignatura asignatura = getAsignaturaById(idAsignatura);
+        boolean ok = false;
+        if (asignatura != null) {
+            asignatura = em.merge(asignatura);
+            em.remove(asignatura);
             ok = true;
         } 
         em.close();
@@ -213,7 +227,7 @@ public class AlexiaEJB {
         List<NotasDTO> nfinal = new ArrayList();
         
         for (Nota n : notas) {
-            nfinal.add(new NotasDTO(getAsignaturaById(n.getIdasignatura()), getProfesorById(n.getIdprofesor()), n.getNota()));
+            nfinal.add(new NotasDTO(getAsignaturaById(n.getIdasignatura()).getNombre(), getProfesorById(n.getIdprofesor()), n.getNota()));
         }
         
         return nfinal;

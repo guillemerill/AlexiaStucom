@@ -55,7 +55,7 @@ public class AdminServlet extends HttpServlet {
             int idAsignatura = Integer.parseInt(request.getParameter("asignatura"));
 // TODO: id 0
             String msg;
-            if (ejb.eliminarProfesor(idAsignatura)) {
+            if (ejb.eliminarAsignatura(idAsignatura)) {
                 request.setAttribute("status", STATUS_OK);
                 msg = "La asignatura se ha eliminado correctamente.";
             } else {

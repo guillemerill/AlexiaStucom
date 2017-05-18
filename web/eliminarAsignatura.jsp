@@ -15,7 +15,7 @@
             <select name="asignatura">
                 <%
                 List<Asignatura> asignaturas = (List<Asignatura>) request.getAttribute("asignaturas");
-                    if (asignaturas.size() == 0) {
+                    if (asignaturas.size() > 0) {
                        for (Asignatura a : asignaturas) { 
                 %> 
                         <option value="<%=a.getIdasignatura()%>"><%=a.getNombre()%></option>
@@ -26,6 +26,8 @@
             </select>
              <p><input type="submit" value="Eliminar esta asignatura" name="action"></p>
         </form>
-        <a href="index.jsp">Main menu</a>
+        <form action="UsuarioServlet">
+            <input type="submit" value="Volver al menu" name="action">
+        </form>
     </body>
 </html>
