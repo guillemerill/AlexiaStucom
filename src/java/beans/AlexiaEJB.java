@@ -60,7 +60,7 @@ public class AlexiaEJB {
     }
     
     private boolean existeProfesor(Profesor p) {
-        return !emf.createEntityManager().createNamedQuery("Profesor.findByNombreUsu").setParameter("nombreUsu", p.getNombreUsu()).getResultList().isEmpty();
+        return !emf.createEntityManager().createNamedQuery("Profesor.findByNombreUsu").setParameter("nombre_usu", p.getNombreUsu()).getResultList().isEmpty();
     }
     
     private boolean existeAsignatura(Asignatura a) {
@@ -149,6 +149,7 @@ public class AlexiaEJB {
         if (alumno != null) {
             Usuario u = getUsuarioBynombreUsu(alumno.getNombreUsu());
             if (u != null) {
+                u = em.merge(u);
                 em.remove(u);
             }
             alumno = em.merge(alumno);
@@ -170,9 +171,10 @@ public class AlexiaEJB {
         if (profesor != null) {
             Usuario u = getUsuarioBynombreUsu(profesor.getNombreUsu());
             if (u != null) {
+                u = em.merge(u);
                 em.remove(u);
             }
-
+            profesor = em.merge(profesor);
             em.remove(profesor);
             ok = true;
         } 

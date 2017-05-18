@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Profesor.findByIdprofesor", query = "SELECT p FROM Profesor p WHERE p.idprofesor = :idprofesor")
     , @NamedQuery(name = "Profesor.findByNombre", query = "SELECT p FROM Profesor p WHERE p.nombre = :nombre")
     , @NamedQuery(name = "Profesor.findByApellidos", query = "SELECT p FROM Profesor p WHERE p.apellidos = :apellidos")
-    , @NamedQuery(name = "Profesor.findByNombreUsu", query = "SELECT p FROM Profesor p WHERE p.nombreUsu = :nombreUsu")
+    , @NamedQuery(name = "Profesor.findByNombreUsu", query = "SELECT p FROM Profesor p WHERE p.nombre_usu = :nombre_usu")
     , @NamedQuery(name = "Profesor.findByPass", query = "SELECT p FROM Profesor p WHERE p.pass = :pass")
     , @NamedQuery(name = "Profesor.findByIdIn", query = "SELECT p FROM Profesor p WHERE p.idprofesor IN :id")
 })
@@ -57,7 +57,7 @@ public class Profesor implements Serializable {
     @NotNull
     @Size(min = 1, max = 45)
     @Column(name = "nombre_usu")
-    private String nombreUsu;
+    private String nombre_usu;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
@@ -71,18 +71,18 @@ public class Profesor implements Serializable {
         this.idprofesor = idprofesor;
     }
 
-    public Profesor(Integer idprofesor, String nombre, String apellidos, String nombreUsu, String pass) {
+    public Profesor(Integer idprofesor, String nombre, String apellidos, String nombre_usu, String pass) {
         this.idprofesor = idprofesor;
         this.nombre = nombre;
         this.apellidos = apellidos;
-        this.nombreUsu = nombreUsu;
+        this.nombre_usu = nombre_usu;
         this.pass = pass;
     }
     
-    public Profesor(String nombre, String apellidos, String nombreUsu, String pass) {
+    public Profesor(String nombre, String apellidos, String nombre_usu, String pass) {
         this.nombre = nombre;
         this.apellidos = apellidos;
-        this.nombreUsu = nombreUsu;
+        this.nombre_usu = nombre_usu;
         this.pass = pass;
     }
 
@@ -111,11 +111,11 @@ public class Profesor implements Serializable {
     }
 
     public String getNombreUsu() {
-        return nombreUsu;
+        return nombre_usu;
     }
 
-    public void setNombreUsu(String nombreUsu) {
-        this.nombreUsu = nombreUsu;
+    public void setNombreUsu(String nombre_usu) {
+        this.nombre_usu = nombre_usu;
     }
 
     public String getPass() {

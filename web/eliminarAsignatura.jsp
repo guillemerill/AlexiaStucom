@@ -19,7 +19,7 @@
                         <option value="<%=a.getIdasignatura()%>"><%=a.getNombre()%></option>
                     <% } %>  
                 </select>
-                <p><input type="submit" value="Eliminar este profesor" name="action"></p>
+                <p><input type="submit" value="Eliminar esta asignatura" name="action"></p>
             <% } else { %>
                 <div>No hay profesores.</div>
             <% } %>
