@@ -16,7 +16,7 @@
             <select name="profesor">
                 <%
                 List<Profesor> profesores = (List<Profesor>) request.getAttribute("profesores");
-                    if (profesores.size() == 0) {
+                    if (profesores.size() > 0) {
                        for (Profesor p : profesores) { 
                 %> 
                         <option value="<%=p.getIdprofesor()%>"><%=p.getNombre()%> <%=p.getApellidos()%></option>
