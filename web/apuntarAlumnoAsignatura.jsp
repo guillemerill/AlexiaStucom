@@ -27,7 +27,7 @@
                     <option value="0">No hay asignaturas</option>
             <% } %>
             </select>
-            <p><input type="submit" value="Seleccionar" name="select"></p>
+            <p><input type="submit" value="Seleccionar asignatura" name="action"></p>
         </form>
         <% } else { %>
         <form action="UsuarioServlet" method="POST">

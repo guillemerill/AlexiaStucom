@@ -50,7 +50,7 @@ public class AlumnoServlet extends HttpServlet {
             request.getRequestDispatcher("/apuntarAlumnoAsignatura.jsp").forward(request, response);
         }
         
-        if ("Seleccionar".equalsIgnoreCase(request.getParameter("select"))) {
+        if ("Seleccionar asignatura".equals(request.getParameter("action"))) {
              String user = (String) request.getSession(true).getAttribute("user");
             if (user.equals("")) {
                 request.setAttribute("msg", "Debes iniciar sesión.");
